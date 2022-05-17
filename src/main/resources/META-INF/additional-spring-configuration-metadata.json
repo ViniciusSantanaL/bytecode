@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "razes.jwt.secret",
+    "type": "java.lang.String",
+    "description": "A description for 'razes.jwt.secret'"
+  },
+  {
+    "name": "razes.jwt.expiration",
+    "type": "java.lang.String",
+    "description": "A description for 'razes.jwt.expiration'"
+  }
+]}
