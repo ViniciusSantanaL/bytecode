@@ -30,7 +30,7 @@ import br.com.razes.bytecode.model.users.dto.UserDTO;
 import br.com.razes.bytecode.service.users.UserService;
 
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 public class UserController {
 	
 	@Autowired
@@ -45,8 +45,8 @@ public class UserController {
 		if(userExist.isPresent())
 			return ResponseEntity.badRequest().build();
 		
-		User newUser = userForm.converter(userForm,userService);
-		userService.saveUser(newUser);
+		User newUser = userForm.converter(userForm);
+		newUser = userService.saveUser(newUser);
 		
 		URI uri = uriBuilder.path("/users/{id}").buildAndExpand(newUser.getId()).toUri();
 		

@@ -1,13 +1,13 @@
 package br.com.razes.bytecode.service.users;
 
-import java.util.List;
-import java.util.Optional;
-
+import br.com.razes.bytecode.model.users.Profile;
+import br.com.razes.bytecode.model.users.ProfileType;
+import br.com.razes.bytecode.model.users.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import br.com.razes.bytecode.model.users.Profile;
-import br.com.razes.bytecode.model.users.User;
+import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 	
@@ -21,15 +21,15 @@ public interface UserService {
 
 	Optional<User> getUserBy(String username);
 	
-	Profile saveProfile(String profile);
+	Profile saveProfile(ProfileType profile);
 
 	Optional<Profile> getProfileBy(String profileName);
 	
 	List<Profile> getProfiles();
 	
-	boolean addProfileForUser(String username, String nameProfile);
+	boolean addProfileForUser(String username, ProfileType profileType);
 	
-	boolean removeProfileForUser(String username, String nameProfile);
+	boolean removeProfileForUser(String username, ProfileType profileType);
 
 	boolean deleteById(Long id);
 

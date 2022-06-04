@@ -12,7 +12,7 @@ import br.com.razes.bytecode.service.users.UserService;
 public class UserForm {
 	
 	@NotNull @NotEmpty @Length(min = 5,max = 30)
-	private String userName;
+	private String username;
 	
 	@NotNull @NotEmpty @Length(min = 5)
 	private String email;
@@ -21,10 +21,10 @@ public class UserForm {
 	private String password;
 	
 	public String getUserName() {
-		return userName;
+		return username;
 	}
 	public void setUserName(String username) {
-		this.userName = username;
+		this.username = username;
 	}
 	public String getEmail() {
 		return email;
@@ -38,7 +38,7 @@ public class UserForm {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public User converter(UserForm userForm, UserService userService) {
-		return new User(userName,email,new BCryptPasswordEncoder().encode(password),userService);
+	public User converter(UserForm userForm) {
+		return new User(username,email,new BCryptPasswordEncoder().encode(password));
 	}
 }

@@ -1,20 +1,18 @@
 package br.com.razes.bytecode.service.users.impl;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.yaml.snakeyaml.util.EnumUtils;
-
 import br.com.razes.bytecode.model.users.Profile;
-import br.com.razes.bytecode.model.users.TypeProfile;
+import br.com.razes.bytecode.model.users.ProfileType;
 import br.com.razes.bytecode.model.users.User;
 import br.com.razes.bytecode.repository.users.ProfileRepository;
 import br.com.razes.bytecode.repository.users.UserRepository;
 import br.com.razes.bytecode.service.users.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -53,9 +51,10 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public Profile saveProfile(String profileName) {
+	public Profile saveProfile(ProfileType profileName) {
 		Profile profile = new Profile(profileName);
-		return profileRepository.save(profile);
+		profile = profileRepository.save(profile);
+		return profile;
 	}
 	
 	@Override
@@ -70,24 +69,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public boolean addProfileForUser(String username, String nameProfile) {
-		
-		try {
-			EnumUtils.findEnumInsensitiveCase(TypeProfile.class, nameProfile);
-		} catch (Exception e) {
-			
-			return false;
-		}
+	public boolean addProfileForUser(String username, ProfileType profileType) {
+
 		Optional<User> user = getUserBy(username);
+		Profile profile = new Profile(profileType);
 		
-		if(user.isEmpty()) {
+		if(user.isEmpty())
 			return false;
-		}
-			
-		Optional<Profile> userProfile = getProfileBy(nameProfile);
-		
-		if(!(user.get().getProfiles().contains(userProfile.get()))) {
-			user.get().getProfiles().add(userProfile.get());
+
+		if(!(user.get().getProfiles().contains(profile))) {
+			user.get().getProfiles().add(profile);
 			return true;
 		}else {
 			return false;
@@ -95,23 +86,16 @@ public class UserServiceImpl implements UserService {
 					
 	}
 	@Override
-	public boolean removeProfileForUser(String username, String nameProfile) {
-		try {
-			EnumUtils.findEnumInsensitiveCase(TypeProfile.class, nameProfile);
-		} catch (Exception e) {
-			
-			return false;
-		}
+	public boolean removeProfileForUser(String username, ProfileType profileType) {
+
 		Optional<User> user = getUserBy(username);
-		
-		if(user.isEmpty()) {
+		Profile profile = new Profile(profileType);
+
+		if(user.isEmpty())
 			return false;
-		}
-			
-		Optional<Profile> userProfile = getProfileBy(nameProfile);
-		
-		if(user.get().getProfiles().contains(userProfile.get())) {
-			user.get().getProfiles().remove(userProfile.get());
+
+		if(user.get().getProfiles().contains(profile)) {
+			user.get().getProfiles().remove(profile);
 			return true;
 		}else {
 			return false;

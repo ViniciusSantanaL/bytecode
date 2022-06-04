@@ -18,7 +18,7 @@ import br.com.razes.bytecode.model.auth.dto.TokenDTO;
 import br.com.razes.bytecode.security.TokenService;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 	
 	@Autowired

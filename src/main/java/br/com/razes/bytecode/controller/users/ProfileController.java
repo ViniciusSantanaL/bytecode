@@ -1,26 +1,21 @@
 package br.com.razes.bytecode.controller.users;
 
+import br.com.razes.bytecode.model.users.Profile;
+import br.com.razes.bytecode.model.users.ProfileType;
+import br.com.razes.bytecode.model.users.dto.ProfileDTO;
+import br.com.razes.bytecode.service.users.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import javax.transaction.Transactional;
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.yaml.snakeyaml.util.EnumUtils;
-
-import br.com.razes.bytecode.model.users.Profile;
-import br.com.razes.bytecode.model.users.TypeProfile;
-import br.com.razes.bytecode.service.users.UserService;
-
 @RestController
-@RequestMapping("/users-profile")
+@RequestMapping("/api/users-profile")
 public class ProfileController {
 	
 	@Autowired
@@ -46,27 +41,28 @@ public class ProfileController {
 	// This EndPoint just use for developers
 	// Obs:Pay attention for user this endpoint, because is necessary update TypeProfille
 	@PostMapping
-	public ResponseEntity<?> register(@RequestParam String profileName){
-		
+	public ResponseEntity<?> register(@RequestParam String profileName, UriComponentsBuilder uriBuilder){
+
 		try {
-			
-			EnumUtils.findEnumInsensitiveCase(TypeProfile.class, profileName);
+			ProfileType profile = ProfileType.valueOf(profileName);
+			Profile newProfile = userService.saveProfile(profile);
+			URI uri = uriBuilder.path("/api/users-profile/{id}").buildAndExpand(newProfile.getId()).toUri();
+
+			return ResponseEntity.created(uri).body(new ProfileDTO(newProfile));
 			
 		} catch (Exception e) {
-			
-			userService.saveProfile(profileName);
-			return ResponseEntity.ok().build();
+			return ResponseEntity.badRequest().build();
 		}
-		
-		return ResponseEntity.badRequest().build();
+
 	}
 	
 	@PutMapping("/add")
 	@Transactional
-	public ResponseEntity<?> addProfileForUser(@RequestParam String nameProfile,@RequestParam String username){
-		
-		boolean successAddProfile = userService.addProfileForUser(username, nameProfile);
-		
+	public ResponseEntity<?> addProfileForUser(@RequestParam String profileName,@RequestParam String username){
+
+		ProfileType profile = ProfileType.valueOf(profileName);
+		boolean successAddProfile = userService.addProfileForUser(username, profile);
+
 		if(successAddProfile)
 			return ResponseEntity.ok().build();
 		else
@@ -74,11 +70,12 @@ public class ProfileController {
 	}
 	@PutMapping("/remove")
 	@Transactional
-	public ResponseEntity<?> removeProfileForUser(@RequestParam String nameProfile,@RequestParam String username){
+	public ResponseEntity<?> removeProfileForUser(@RequestParam String profileName,@RequestParam String username){
+
+		ProfileType profile = ProfileType.valueOf(profileName);
+		boolean successRemoveProfile = userService.removeProfileForUser(username, profile);
 		
-		boolean successAddProfile = userService.removeProfileForUser(username, nameProfile);
-		
-		if(successAddProfile)
+		if(successRemoveProfile)
 			return ResponseEntity.ok().build();
 		else
 			return ResponseEntity.badRequest().build();

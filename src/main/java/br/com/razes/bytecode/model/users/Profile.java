@@ -1,28 +1,26 @@
 package br.com.razes.bytecode.model.users;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 import org.springframework.security.core.GrantedAuthority;
+
+import javax.persistence.*;
 
 @Entity
 public class Profile implements GrantedAuthority {
 
 	private static final long serialVersionUID = 1L;
-	
-	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+
+	@Id
 	private Long id;
 	
-	//Maped on Class TypeProfile
+	//Mapped on Class TypeProfile
 	private String name;
 	
 	public Profile() {
 		
 	}
-	public Profile(String profileName) {
-		this.name = profileName;
+	public Profile(ProfileType profileName) {
+		setId(profileName);
+		setName(profileName);
 	}
 
 	@Override
@@ -34,16 +32,19 @@ public class Profile implements GrantedAuthority {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	public void setId(ProfileType profileType) {
+		if(profileType != null)
+			this.id = (long) profileType.getCode();
 	}
 
 	public String getName() {
-		return name;
+		return ProfileType.valueOf(name).toString();
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setName(ProfileType profileType) {
+		if(profileType != null)
+			this.name = profileType.toString();
+
 	}
 	
 }

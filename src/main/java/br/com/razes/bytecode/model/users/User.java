@@ -5,13 +5,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -19,12 +13,14 @@ import org.springframework.security.core.userdetails.UserDetails;
 import br.com.razes.bytecode.service.users.UserService;
 
 @Entity
-@Table(name = "bytecodeUser")
+@Table(name = "bytecode_user")
 public class User implements UserDetails{
 
 	private static final long serialVersionUID = 1L;
-	
-	@Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO, generator = "user_sequence")
+	@SequenceGenerator(name = "user_sequence", sequenceName = "user_sequence", allocationSize = 1, initialValue = 2)
 	private Long id;
 	private String username;
 	private String email;
@@ -36,11 +32,11 @@ public class User implements UserDetails{
 	public User() {
 	}
 	
-	public User(String username, String email, String password, UserService userService) {
+	public User(String username, String email, String password) {
 		this.username = username;
 		this.email = email;
 		this.password = password;
-		Profile defaultProfile = userService.getProfileBy(TypeProfile.CLIENT.toString()).get();
+		Profile defaultProfile = new Profile(ProfileType.CLIENT);
 		this.profiles.add(defaultProfile);
 	}
 
@@ -79,10 +75,6 @@ public class User implements UserDetails{
 
 	public List<Profile> getProfiles() {
 		return profiles;
-	}
-
-	public void setProfiles(List<Profile> profiles) {
-		this.profiles = profiles;
 	}
 
 	public void setPassword(String password) {
