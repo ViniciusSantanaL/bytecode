@@ -7,7 +7,9 @@ import javax.persistence.*;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Transactions {
@@ -17,8 +19,8 @@ public class Transactions {
     @SequenceGenerator(name = "transactions_sequence", sequenceName = "transactions_sequence", allocationSize = 1)
     private Long id;
 
-    @OneToMany(mappedBy = "transactions")
-    private final List<CoinTransaction> coinTransactions = new ArrayList<CoinTransaction>();
+    @OneToMany(mappedBy = "transactions",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private final Set<CoinTransaction> coinTransactions = new HashSet<>();
 
     private Integer transactionsCoinType;
     private Long idUser;
@@ -45,7 +47,7 @@ public class Transactions {
         return id;
     }
 
-    public List<CoinTransaction> getCoinTransactions() {
+    public Set<CoinTransaction> getCoinTransactions() {
         return coinTransactions;
     }
 

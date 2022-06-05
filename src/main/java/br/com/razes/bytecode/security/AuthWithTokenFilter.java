@@ -49,11 +49,8 @@ public class AuthWithTokenFilter extends OncePerRequestFilter{
 
 	private String recoverToken(HttpServletRequest request) {
 		Optional<String> token = Optional.ofNullable(request.getHeader("Authorization"))
-				.filter(e -> !e.isEmpty() && e.startsWith("Bearer "));
-		if(token.isPresent())
-			return token.get().substring(7, token.get().length());
-		else
-			return token.orElse("");
+				.filter(e -> e.startsWith("Bearer "));
+		return token.map(s -> s.substring(7)).orElse("");
 	}
 
 }

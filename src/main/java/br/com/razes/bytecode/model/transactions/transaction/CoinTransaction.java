@@ -5,6 +5,7 @@ package br.com.razes.bytecode.model.transactions.transaction;
 import br.com.razes.bytecode.model.transactions.Transactions;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -18,13 +19,15 @@ public class CoinTransaction {
     @SequenceGenerator(name = "coin_transaction_sequence", sequenceName = "coin_transaction_sequence", allocationSize = 1)
     private Long id;
 
-    private BigInteger amount = BigInteger.ZERO;
+    private BigDecimal amount;
 
     private String  symbolFromCoin;
 
     private String symbolToCoin;
 
-    private Long rate;
+    private BigDecimal result;
+
+    private BigDecimal rate;
 
     @ManyToOne
     private Transactions transactions;
@@ -34,19 +37,15 @@ public class CoinTransaction {
     public CoinTransaction(){
 
     }
-    public CoinTransaction(BigInteger amount, String symbolFromCoin, String symbolToCoin, Transactions transactions) {
+    public CoinTransaction(BigDecimal amount, String symbolFromCoin, String symbolToCoin,
+        Transactions transactions, BigDecimal result ,BigDecimal rate) {
         this.amount = amount;
         this.symbolFromCoin = symbolFromCoin;
         this.symbolToCoin = symbolToCoin;
-        this.rate = getCurrentRate();
+        this.result = result;
+        this.rate = rate;
         this.transactions = transactions;
     }
-    private Long getCurrentRate() {
-        long currentRate = 0L;
-        currentRate =+ 1L;
-        return currentRate;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -60,24 +59,12 @@ public class CoinTransaction {
         return Objects.hash(id);
     }
 
-    private void setAmount(BigInteger amount) {
-        this.amount = amount;
-    }
-
-    private void setSymbolFromCoin(String symbolFromCoin) {
-        this.symbolFromCoin = symbolFromCoin;
-    }
-
-    private void setSymbolToCoin(String symbolToCoin) {
-        this.symbolToCoin = symbolToCoin;
-    }
-
 
     public Long getId() {
         return id;
     }
 
-    public BigInteger getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 
@@ -89,19 +76,18 @@ public class CoinTransaction {
         return symbolToCoin;
     }
 
-    public Long getRate() {
+    public BigDecimal getRate() {
         return rate;
     }
 
     public Transactions getTransactions() {
         return transactions;
     }
-
-    public void setTransactions(Transactions transactions) {
-        this.transactions = transactions;
-    }
-
     public ZonedDateTime getRegister() {
         return register;
+    }
+
+    public BigDecimal getResult() {
+        return result;
     }
 }

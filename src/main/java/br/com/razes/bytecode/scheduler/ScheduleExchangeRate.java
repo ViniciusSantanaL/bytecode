@@ -10,14 +10,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Component
@@ -33,7 +30,7 @@ public class ScheduleExchangeRate {
     private ExchangeRateService exchangeRateService;
 
 
-    @Scheduled(initialDelay = 15000L, fixedDelay = 60 * 60 * 1000L)
+
     public void  updateAllExchangeRatesTraditionalCoins() {
         try {
             Set<String> symbolsAvailable =  FileHandlerUtils.getAllSymbolsAvailable();

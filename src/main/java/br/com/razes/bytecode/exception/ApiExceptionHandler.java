@@ -28,7 +28,7 @@ public class ApiExceptionHandler {
 		ApiResponseExceptionDTO exception = new ApiResponseExceptionDTO(
 				e.getMessage(), 
 				HttpStatus.INTERNAL_SERVER_ERROR, 
-				ZonedDateTime.now(ZoneId.of("Z")));
+				ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
 		
 		return exception;
 	}
@@ -40,7 +40,7 @@ public class ApiExceptionHandler {
 		ApiResponseExceptionDTO exception = new ApiResponseExceptionDTO(
 				e.getMessage(), 
 				HttpStatus.BAD_REQUEST, 
-				ZonedDateTime.now(ZoneId.of("Z")));
+				ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));
 		
 		return exception;
 	}
