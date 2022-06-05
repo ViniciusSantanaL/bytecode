@@ -1,5 +1,6 @@
 package br.com.razes.bytecode.service.api.layer.impl;
 
+import br.com.razes.bytecode.model.rates.ExchangeRate;
 import br.com.razes.bytecode.service.api.layer.ApiLayerClient;
 import br.com.razes.bytecode.service.api.layer.dto.ApiLayerResponseCoinsDTO;
 import br.com.razes.bytecode.service.api.layer.dto.ApiLayerResponseRatesDTO;

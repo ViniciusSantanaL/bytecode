@@ -35,9 +35,4 @@ public class CoinController {
 
         return CoinDTO.converterForPage(coins);
     }
-
-    @PostMapping
-    public void test() {
-        coinService.saveCoin(new Coin("TEST", "TESTE 123", CoinType.TRADITIONAL));
-    }
 }

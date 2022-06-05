@@ -2,6 +2,7 @@ package br.com.razes.bytecode.service.types.traditional.dto;
 
 import br.com.razes.bytecode.service.api.layer.dto.ApiLayerResponseRatesDTO;
 
+import java.math.BigInteger;
 import java.util.Map;
 
 public class RatesTraditionalCoinDTO {
@@ -10,7 +11,7 @@ public class RatesTraditionalCoinDTO {
 
     private final String date;
 
-    private final Map<String,Long> rates;
+    private final Map<String, String> rates;
 
     public RatesTraditionalCoinDTO(ApiLayerResponseRatesDTO apiResponse) {
 
@@ -28,7 +29,7 @@ public class RatesTraditionalCoinDTO {
         return date;
     }
 
-    public Map<String, Long> getRates() {
+    public Map<String, String> getRates() {
         return rates;
     }
 }

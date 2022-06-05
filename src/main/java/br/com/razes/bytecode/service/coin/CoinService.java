@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Set;
 
 public interface CoinService {
 
@@ -13,11 +14,11 @@ public interface CoinService {
 
     Page<Coin> findBySymbols(String[] symbol, Pageable pageable);
 
-    List<String> getAllSymbolsByType(CoinType coinType);
+    Set<String> getAllSymbolsByType(CoinType coinType);
 
-    Coin saveCoin(Coin coin);
+    void saveCoin(Coin coin);
 
-    List<Coin> saveAllCoins(List<Coin> coins);
+    void saveAllCoins(List<Coin> coins);
 
 
 

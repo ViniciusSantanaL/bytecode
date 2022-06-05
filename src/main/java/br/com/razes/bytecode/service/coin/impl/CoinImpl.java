@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class CoinImpl implements CoinService {
@@ -26,20 +27,19 @@ public class CoinImpl implements CoinService {
     }
 
     @Override
-    public List<String> getAllSymbolsByType(CoinType coinType) {
+    public Set<String> getAllSymbolsByType(CoinType coinType) {
         return coinRepository.getAllSymbolsByType(coinType.getCode());
     }
 
     @Override
-    public Coin saveCoin(Coin newCoin) {
-        return coinRepository.save(newCoin);
+    public void saveCoin(Coin newCoin) {
+        coinRepository.save(newCoin);
     }
 
     @Override
-    public List<Coin> saveAllCoins(List<Coin> coins) {
+    public void saveAllCoins(List<Coin> coins) {
         coins =  coinRepository.saveAll(coins);
 
-        return coins;
     }
 
 

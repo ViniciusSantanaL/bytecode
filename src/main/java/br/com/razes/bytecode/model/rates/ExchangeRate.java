@@ -1,8 +1,12 @@
 package br.com.razes.bytecode.model.rates;
 
 import javax.persistence.*;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class ExchangeRate {
@@ -12,24 +16,31 @@ public class ExchangeRate {
     @SequenceGenerator(name = "exchange_rate_sequence", sequenceName = "exchange_rate_sequence", allocationSize = 1)
     private Long id;
 
-    private String symbol;
+    private String baseCoin;
 
-    @OneToMany(mappedBy = "exchangeRate")
-    private List<CurrentRate> currentRates = new ArrayList<CurrentRate>();
+    @OneToMany(mappedBy = "exchangeRate",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private final Set<CurrentRate> currentRates = new HashSet<CurrentRate>();
 
     private boolean active = false;
 
-    public ExchangeRate(){}
+    private ZonedDateTime updateRate;
+
+    public ExchangeRate(){
+    }
+
+    public ExchangeRate(String baseCoin){
+        this.baseCoin = baseCoin;
+    }
 
     public Long getId() {
         return id;
     }
 
-    public String getSymbol() {
-        return symbol;
+    public String getBaseCoin() {
+        return baseCoin;
     }
 
-    public List<CurrentRate> getCurrentRates() {
+    public Set<CurrentRate> getCurrentRates() {
         return currentRates;
     }
 
@@ -39,5 +50,13 @@ public class ExchangeRate {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public ZonedDateTime getUpdateRate() {
+        return updateRate;
+    }
+
+    public void setUpdateRate(ZonedDateTime updateRate) {
+        this.updateRate = updateRate;
     }
 }

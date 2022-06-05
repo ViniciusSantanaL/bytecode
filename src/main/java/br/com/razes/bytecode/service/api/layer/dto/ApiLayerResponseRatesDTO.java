@@ -2,12 +2,13 @@ package br.com.razes.bytecode.service.api.layer.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+import java.math.BigInteger;
 import java.util.Map;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ApiLayerResponseRatesDTO {
     private String base;
     private String date;
-    private Map<String, Long> rates;
+    private Map<String, String> rates;
     private boolean success;
 
 
@@ -35,11 +36,11 @@ public class ApiLayerResponseRatesDTO {
         this.date = date;
     }
 
-    public Map<String, Long> getRates() {
+    public Map<String, String> getRates() {
         return rates;
     }
 
-    public void setRates(Map<String, Long> rates) {
+    public void setRates(Map<String, String> rates) {
         this.rates = rates;
     }
 

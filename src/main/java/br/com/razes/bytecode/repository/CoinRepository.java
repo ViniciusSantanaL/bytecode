@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
+import java.util.Set;
 
 public interface CoinRepository extends JpaRepository<Coin, Long> {
 
@@ -15,5 +16,5 @@ public interface CoinRepository extends JpaRepository<Coin, Long> {
     Page<Coin> findBySymbols(@Param("symbols") String[] symbols, Pageable pageable);
 
     @Query("select c.symbol from Coin c where c.coinType = :coinType")
-    List<String> getAllSymbolsByType(Integer coinType);
+    Set<String> getAllSymbolsByType(Integer coinType);
 }
