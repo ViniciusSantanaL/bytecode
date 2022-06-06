@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
@@ -31,6 +32,7 @@ public class ScheduleExchangeRate {
 
 
 
+    @Scheduled(cron = "${date.time.update.exchange.rates}")
     public void  updateAllExchangeRatesTraditionalCoins() {
         try {
             Set<String> symbolsAvailable =  FileHandlerUtils.getAllSymbolsAvailable();
