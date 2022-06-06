@@ -38,7 +38,7 @@ public class CoinTransaction {
 
     }
     public CoinTransaction(BigDecimal amount, String symbolFromCoin, String symbolToCoin,
-        Transactions transactions, BigDecimal result ,BigDecimal rate) {
+                        BigDecimal result ,BigDecimal rate ,Transactions transactions) {
         this.amount = amount;
         this.symbolFromCoin = symbolFromCoin;
         this.symbolToCoin = symbolToCoin;

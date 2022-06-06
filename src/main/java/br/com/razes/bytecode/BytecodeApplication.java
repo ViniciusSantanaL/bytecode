@@ -1,5 +1,6 @@
 package br.com.razes.bytecode;
 
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.openfeign.EnableFeignClients;
@@ -14,6 +15,7 @@ import java.io.IOException;
 @EnableFeignClients
 @EnableScheduling
 @EnableAsync
+@OpenAPIDefinition
 public class BytecodeApplication {
 
     public static void main(String[] args) throws IOException { SpringApplication.run(BytecodeApplication.class, args); }
