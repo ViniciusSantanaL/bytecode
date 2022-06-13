@@ -10,14 +10,14 @@ import java.util.Set;
 public class FileHandlerUtils {
 
     public static Set<String> getAllSymbolsAvailable() {
-        String symbols = "";
-        try {
-            File resource = new ClassPathResource("active-rates-coin.txt").getFile();
-            symbols = new String(Files.readAllBytes(resource.toPath()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        symbols = symbols.replaceAll("\\s", "");
+        String symbols = "BRL,USD,EUR,GBP,JPY,AUD";
+       // try {
+         //   File resource = new ClassPathResource("active-rates-coin.txt").getFile();
+           // symbols = new String(Files.readAllBytes(resource.toPath()));
+        //} catch (IOException e) {
+          //  e.printStackTrace();
+        //}
+        //symbols = symbols.replaceAll("\\s", "");
 
         return Set.of(symbols.split(","));
     }
