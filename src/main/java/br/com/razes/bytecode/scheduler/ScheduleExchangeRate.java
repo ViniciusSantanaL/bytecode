@@ -32,7 +32,7 @@ public class ScheduleExchangeRate {
 
 
 
-    @Scheduled(cron = "${date.time.update.exchange.rates}")
+    @Scheduled(initialDelay = 15000L, fixedDelay = 60 * 60 * 1000L)
     public void  updateAllExchangeRatesTraditionalCoins() {
         try {
             Set<String> symbolsAvailable =  FileHandlerUtils.getAllSymbolsAvailable();
