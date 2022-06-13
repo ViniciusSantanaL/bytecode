@@ -25,13 +25,17 @@ public class Transactions {
     private Integer transactionsCoinType;
     private Long idUser;
 
+    private Long idWallet;
     private final ZonedDateTime register = ZonedDateTime.now(ZoneId.of("America/Sao_Paulo"));
+
+
 
     public Transactions() {}
 
-    public Transactions(Long idUser, CoinType transactionsCoinType) {
+    public Transactions(Long idUser, CoinType transactionsCoinType, Long idWallet) {
         this.idUser = idUser;
         setTransactionsCoinType(transactionsCoinType);
+        this.idWallet = idWallet;
     }
 
     public void setTransactionsCoinType(CoinType transactionsCoinType) {
@@ -57,5 +61,9 @@ public class Transactions {
 
     public ZonedDateTime getRegister() {
         return register;
+    }
+
+    public Long getIdWallet() {
+        return idWallet;
     }
 }

@@ -18,8 +18,8 @@ public class TradeForm {
     @NotNull @NotEmpty @NotBlank @Length(min = 3, max = 3)
     private String fromSymbol;
 
-    @NotNull
-    private int type;
+
+    private int type = 1;
 
     public TradeForm(){
 

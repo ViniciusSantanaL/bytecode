@@ -11,4 +11,5 @@ public interface ExchangeRateService {
     void saveAllExchangeRates(List<ExchangeRate> rates);
 
     ExchangeRate getExchangeRateBySymbol(String baseCoin);
+
 }

@@ -18,6 +18,8 @@ import java.io.IOException;
 @OpenAPIDefinition
 public class BytecodeApplication {
 
-    public static void main(String[] args) throws IOException { SpringApplication.run(BytecodeApplication.class, args); }
+    public static void main(String[] args) throws IOException {
+        SpringApplication.run(BytecodeApplication.class, args);
+    }
 
 }

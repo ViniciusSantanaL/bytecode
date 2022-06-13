@@ -6,21 +6,22 @@ import br.com.razes.bytecode.model.rates.CurrentRate;
 import br.com.razes.bytecode.model.rates.ExchangeRate;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Optional;
 
 public class CalculateTradeUtils {
 
-    public static BigDecimal calculateTradeFromOneCoin(TradeForm tradeForm, ExchangeRate rates) {
+    public static BigDecimal calculateTradeFromOneCoin(String fromSymbol,BigDecimal amount, ExchangeRate rates) {
 
         Optional<CurrentRate> currentRate = rates.getCurrentRates().stream()
-                .filter(current -> current.getSymbol().equals(tradeForm.getFromSymbol()))
+                .filter(current -> current.getSymbol().equals(fromSymbol))
                         .findFirst();
 
         if(currentRate.isEmpty())
-            throw new ApiRequestException("This From Symbol not Exist: " + tradeForm.getFromSymbol());
+            throw new ApiRequestException("This From Symbol not Exist: " + fromSymbol);
 
         BigDecimal currentRateCoin = currentRate.get().getRate();
 
-        return tradeForm.getAmount().multiply(currentRateCoin) ;
+        return amount.divide(currentRateCoin,2, RoundingMode.HALF_UP) ;
     }
 }

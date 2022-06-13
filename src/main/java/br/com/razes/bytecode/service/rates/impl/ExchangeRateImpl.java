@@ -30,4 +30,5 @@ public class ExchangeRateImpl implements ExchangeRateService {
     public ExchangeRate getExchangeRateBySymbol(String baseCoin) {
         return exchangeRateRepository.findByBaseCoin(baseCoin);
     }
+
 }

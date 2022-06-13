@@ -37,7 +37,7 @@ public class ScheduleTraditionalCoin {
 
 
 
-    @Scheduled(initialDelay = 3000L, fixedDelay = 31  * 24 * 60 * 60 * 1000L)
+
     private void  createTraditionalCoinsIfHaveApiData() {
         try {
             TraditionalCoinDTO apiCoins = apiService.getAllCoinsDetails();

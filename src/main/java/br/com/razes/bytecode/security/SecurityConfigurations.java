@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 
 @Configuration
@@ -46,14 +47,12 @@ public class SecurityConfigurations  extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests()
 		.antMatchers(HttpMethod.POST,"/api/users/**").permitAll()
 		.antMatchers(HttpMethod.POST,"/api/auth").permitAll()
-		.antMatchers(HttpMethod.DELETE,"/api/users/**").permitAll()
-		.antMatchers(HttpMethod.GET,"/api/users").permitAll()
-		.antMatchers(HttpMethod.PUT,"/api/users-profile/add").permitAll()
-		.antMatchers(HttpMethod.PUT,"/api/users-profile/remove").permitAll()
-		.antMatchers(HttpMethod.GET,"/api/users-profile").permitAll()
-		.antMatchers(HttpMethod.POST,"/api/users-profile").permitAll()
 		.antMatchers(HttpMethod.GET,"/actuator/**").permitAll()
+		.antMatchers(HttpMethod.GET,"/api/rate/**").permitAll()
+		.antMatchers(HttpMethod.GET,"/api/trade/**").permitAll()
+		.antMatchers(HttpMethod.GET,"/api/coin/**").permitAll()
 		.anyRequest().authenticated()
+		.and().cors()
 		.and().csrf().disable()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 		.and().addFilterBefore(new AuthWithTokenFilter(tokenService, userService), UsernamePasswordAuthenticationFilter.class);

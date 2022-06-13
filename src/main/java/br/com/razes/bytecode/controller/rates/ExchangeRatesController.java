@@ -3,6 +3,7 @@ package br.com.razes.bytecode.controller.rates;
 import br.com.razes.bytecode.exception.ApiRequestException;
 import br.com.razes.bytecode.model.rates.CurrentRate;
 import br.com.razes.bytecode.model.rates.ExchangeRate;
+import br.com.razes.bytecode.model.rates.dto.AllCurrentRateDTO;
 import br.com.razes.bytecode.model.rates.dto.CurrentRateDTO;
 import br.com.razes.bytecode.service.rates.ExchangeRateService;
 import feign.Response;
@@ -16,14 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/rates")
+@RequestMapping("/api/rate")
 public class ExchangeRatesController {
 
     @Autowired
     private ExchangeRateService exchangeRateService;
 
     @GetMapping
-    public ResponseEntity<CurrentRateDTO> exchangeRate(@RequestParam String base, @RequestParam String to) {
+    public ResponseEntity<CurrentRateDTO> exchangeRateOneCoin(@RequestParam String base, @RequestParam String to) {
         ExchangeRate rates = exchangeRateService.getExchangeRateBySymbol(base);
 
         if(rates == null)
@@ -36,6 +37,16 @@ public class ExchangeRatesController {
 
         return ResponseEntity.ok(new CurrentRateDTO(currentRate.get()));
     }
+    @GetMapping("/all")
+    public ResponseEntity<AllCurrentRateDTO> exchangeRateAll(@RequestParam String base) {
 
+        ExchangeRate rates = exchangeRateService.getExchangeRateBySymbol(base);
+
+        if(rates == null)
+            throw new ApiRequestException("This Base Symbol not Exist: " + base);
+
+
+        return ResponseEntity.ok(new AllCurrentRateDTO(rates));
+    }
 
 }

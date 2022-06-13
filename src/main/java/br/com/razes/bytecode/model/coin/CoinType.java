@@ -5,7 +5,8 @@ import java.util.Arrays;
 public enum CoinType {
 
     TRADITIONAL(1),
-    CRYPTO(2);
+    CRYPTO(2),
+    ABOBRINHA(3);
 
     private final int code;
 
