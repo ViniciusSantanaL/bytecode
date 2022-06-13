@@ -29,10 +29,8 @@ public class ScheduleExchangeRate {
 
     @Autowired
     private ExchangeRateService exchangeRateService;
-
-
-
-    @Scheduled(initialDelay = 15000L, fixedDelay = 60 * 60 * 60 * 1000L)
+    
+    @Scheduled(cron = "${date.time.update.exchange.rates}")
     public void  updateAllExchangeRatesTraditionalCoins() {
         try {
             Set<String> symbolsAvailable =  FileHandlerUtils.getAllSymbolsAvailable();
