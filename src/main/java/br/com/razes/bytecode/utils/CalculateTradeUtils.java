@@ -22,6 +22,11 @@ public class CalculateTradeUtils {
 
         BigDecimal currentRateCoin = currentRate.get().getRate();
 
-        return amount.divide(currentRateCoin,2, RoundingMode.HALF_UP) ;
+        if(currentRateCoin.compareTo(BigDecimal.ONE) == 1) {
+            return amount.multiply(currentRateCoin.setScale(2,  RoundingMode.HALF_UP)) ;
+        } else {
+            return amount.divide(currentRateCoin,2, RoundingMode.HALF_UP) ;
+        }
+
     }
 }

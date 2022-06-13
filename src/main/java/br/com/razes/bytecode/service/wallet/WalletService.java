@@ -19,5 +19,7 @@ public interface WalletService {
     Wallet findByIdUser(Long idUser);
 
 
+    Wallet changeBaseBalanceWallet(Wallet wallet, String symbol);
 
+    Wallet deleteFragment(Wallet wallet, String symbolFragment);
 }

@@ -65,12 +65,11 @@ public class TransactionController {
         return ResponseEntity.created(uri).body(tradeDTO);
     }
     @GetMapping
-    public Page<TransactionsDTO> allUserTransaction(@RequestHeader(value = "Authorization") String token,
-        @PageableDefault(sort="transactionsCoinType", direction = Sort.Direction.ASC, page = 0, size=3) Pageable pagination) {
+    public TransactionsDTO allUserTransaction(@RequestHeader(value = "Authorization") String token) {
 
         Long idUser = tokenService.getIdUser(token.substring(7));
 
-        Page<Transactions> transactions = transactionsService.getTransactionsByIdUser(idUser,pagination);
+        Transactions transactions = transactionsService.getTransactionsByIdUser(idUser);
 
         return TransactionsDTO.converter(transactions);
     }

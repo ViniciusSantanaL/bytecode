@@ -28,7 +28,7 @@ public class TransactionsDTO {
         return transactions;
     }
 
-    public static Page<TransactionsDTO> converter(Page<Transactions> transactions) {
-        return transactions.map(TransactionsDTO::new);
+    public static TransactionsDTO converter(Transactions transactions) {
+        return new TransactionsDTO(transactions);
     }
 }

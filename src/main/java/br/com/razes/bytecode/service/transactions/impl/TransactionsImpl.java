@@ -33,8 +33,8 @@ public class TransactionsImpl implements TransactionsService {
     }
 
     @Override
-    public Page<Transactions> getTransactionsByIdUser(Long idUser, Pageable pageable) {
-        return transactionsRepository.findByIdUser(idUser,pageable);
+    public Transactions getTransactionsByIdUser(Long idUser) {
+        return transactionsRepository.findByIdUser(idUser);
     }
 
     @Override

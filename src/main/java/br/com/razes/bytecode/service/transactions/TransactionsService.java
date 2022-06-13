@@ -12,7 +12,7 @@ public interface TransactionsService {
 
     Transactions getTransactionsBy(Long idUser, CoinType coinType);
 
-    Page<Transactions> getTransactionsByIdUser(Long idUser, Pageable pageable);
+    Transactions getTransactionsByIdUser(Long idUser);
 
     void saveTransactions(Long idUser, CoinType coinType, TradeForm tradeForm, TradeDTO tradeDTO, Transactions tran, Wallet Wallet);
 }

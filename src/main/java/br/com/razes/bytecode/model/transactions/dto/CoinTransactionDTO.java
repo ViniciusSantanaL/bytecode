@@ -10,33 +10,37 @@ public class CoinTransactionDTO {
     private final Long id;
     private final BigDecimal amount;
 
-    private final String from;
+    private final String fromSymbol;
 
-    private final String to;
+    private final String toSymbol;
 
     private final BigDecimal rate;
 
     private final ZonedDateTime register;
 
+    private final BigDecimal result;
+
     public CoinTransactionDTO(CoinTransaction coinTransaction) {
         this.id = coinTransaction.getId();
         this.amount = coinTransaction.getAmount();
-        this.from = coinTransaction.getSymbolFromCoin();
-        this.to = coinTransaction.getSymbolToCoin();
+        this.fromSymbol = coinTransaction.getSymbolFromCoin();
+        this.toSymbol = coinTransaction.getSymbolToCoin();
         this.rate = coinTransaction.getRate();
         this.register = coinTransaction.getRegister();
+        this.result = coinTransaction.getResult();
     }
 
     public BigDecimal getAmount() {
         return amount;
     }
 
-    public String getFrom() {
-        return from;
+
+    public String getFromSymbol() {
+        return fromSymbol;
     }
 
-    public String getTo() {
-        return to;
+    public String getToSymbol() {
+        return toSymbol;
     }
 
     public BigDecimal getRate() {
@@ -49,5 +53,9 @@ public class CoinTransactionDTO {
 
     public Long getId() {
         return id;
+    }
+
+    public BigDecimal getResult() {
+        return result;
     }
 }

@@ -14,7 +14,7 @@ public class Wallet {
     @SequenceGenerator(name = "wallet_sequence", sequenceName = "wallet_sequence", allocationSize = 1)
     private Long id;
 
-    private BigDecimal generalBalance;
+    private BigDecimal generalBalance = BigDecimal.ZERO;
 
     private String generalSymbolBalance;
 

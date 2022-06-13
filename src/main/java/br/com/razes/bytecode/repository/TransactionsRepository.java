@@ -9,5 +9,5 @@ public interface TransactionsRepository extends JpaRepository<Transactions, Long
 
     Transactions findByIdUserAndTransactionsCoinType(Long idUser, Integer transactionsCoinType);
 
-    Page<Transactions> findByIdUser(Long id, Pageable pageable);
+    Transactions findByIdUser(Long id);
 }

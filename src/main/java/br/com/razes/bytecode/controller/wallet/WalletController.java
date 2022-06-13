@@ -20,6 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
@@ -123,5 +126,45 @@ public class WalletController {
         URI uri = uriBuilder.path("/api/wallet/{idUser}").buildAndExpand(idUser).toUri();
 
         return ResponseEntity.created(uri).body(new WalletDTO(wallet));
+    }
+
+    @DeleteMapping("/del-fragment")
+    public ResponseEntity<WalletDTO> deleteFragment(
+            @RequestParam @NotEmpty @NotBlank @NotNull String symbolFragment,
+            @RequestHeader(value = "Authorization") String token) {
+
+        Set<String> symbols =  coinService.getAllSymbolsByType(CoinType.TRADITIONAL);
+
+        if(!symbols.contains(symbolFragment))
+            throw new ApiRequestException("This Base Symbol not Exist: " + symbolFragment);
+
+
+        Long idUser = tokenService.getIdUser(token.substring(7));
+
+        Wallet wallet = walletService.findByIdUser(idUser);
+
+        wallet = walletService.deleteFragment(wallet,symbolFragment);
+
+        return ResponseEntity.ok(new WalletDTO(wallet));
+    }
+
+    @PutMapping
+    public ResponseEntity<WalletDTO> changeBaseBalanceWallet(
+            @RequestParam @NotEmpty @NotBlank @NotNull String symbol,
+            @RequestHeader(value = "Authorization") String token) {
+
+        Set<String> availableCoins = FileHandlerUtils.getAllSymbolsAvailable();
+
+        if(!availableCoins.contains(symbol))
+            throw new ApiRequestException("This Base Symbol not Exist: " + symbol);
+
+
+        Long idUser = tokenService.getIdUser(token.substring(7));
+
+        Wallet wallet = walletService.findByIdUser(idUser);
+
+        wallet = walletService.changeBaseBalanceWallet(wallet,symbol);
+
+        return ResponseEntity.ok(new WalletDTO(wallet));
     }
 }
