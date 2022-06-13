@@ -29,7 +29,7 @@ public class ScheduleExchangeRate {
 
     @Autowired
     private ExchangeRateService exchangeRateService;
-    
+
     @Scheduled(cron = "${date.time.update.exchange.rates}")
     public void  updateAllExchangeRatesTraditionalCoins() {
         try {
@@ -41,7 +41,6 @@ public class ScheduleExchangeRate {
         }
         LOGGER.info("Success Update Exchange Rate Traditional Coin");
     }
-    @Async
     public void updateExchangeRateTraditionalCoin(String symbol) {
         LOGGER.info("STARTING UPDATE CURRENT RATES OF " + symbol);
         RatesTraditionalCoinDTO rates =  apiService.getAllExchangeRateOfBaseCoin(symbol);
