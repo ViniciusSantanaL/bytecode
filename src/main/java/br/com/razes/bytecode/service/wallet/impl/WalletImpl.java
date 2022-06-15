@@ -45,12 +45,22 @@ public class WalletImpl implements WalletService {
     }
 
     @Override
+    public String getBaseSymbolWalletByIdUser(Long idUser) {
+        return walletRepository.getSymbolBalanceWalletByIdUser(idUser);
+    }
+
+    @Override
     public Wallet changeBaseBalanceWallet(Wallet wallet, String symbol) {
 
-        wallet.setGeneralSymbolBalance(symbol);
-
-        if(wallet.getWalletFragments().size() == 0)
+        if(wallet.getWalletFragments().size() == 0){
+            wallet.setGeneralSymbolBalance(symbol);
             return walletRepository.save(wallet);
+        }
+
+        String oldBaseWallet = wallet.getGeneralSymbolBalance();
+        BigDecimal initValueWallet = verifyHasInitialValueForChangeBaseSymbolWallet(wallet);
+
+        wallet.setGeneralSymbolBalance(symbol);
 
         Optional<WalletFragment> initialFragment =  wallet.getWalletFragments().stream()
                 .filter(fragment -> fragment.getSymbol().equals(symbol))
@@ -62,17 +72,27 @@ public class WalletImpl implements WalletService {
             wallet.setGeneralBalance(BigDecimal.ZERO);
         }
         ExchangeRate rates = exchangeRateService.getExchangeRateBySymbol(symbol);
-        wallet.getWalletFragments().forEach(walletFragment -> {
+        WalletFragment walletFragmentForSave = null;
+        for(WalletFragment walletFragment : wallet.getWalletFragments()) {
             if(!walletFragment.getSymbol().equals(symbol)) {
-
-                BigDecimal resultRate = CalculateTradeUtils.calculateTradeFromOneCoin(
-                        walletFragment.getSymbol(),walletFragment.getBalance(),rates);
-
+                BigDecimal resultRate;
+                if(oldBaseWallet.equals(walletFragment.getSymbol()) && initValueWallet.compareTo(BigDecimal.ZERO) != 0){
+                    BigDecimal newBalanceFragment = walletFragment.getBalance().add(initValueWallet);
+                     resultRate = CalculateTradeUtils.calculateTradeFromOneCoin(
+                            walletFragment.getSymbol(),true,newBalanceFragment,rates);
+                    walletFragmentForSave = walletFragment;
+                    walletFragment.setBalance(newBalanceFragment);
+                } else {
+                     resultRate = CalculateTradeUtils.calculateTradeFromOneCoin(
+                            walletFragment.getSymbol(),true,walletFragment.getBalance(),rates);
+                }
                 BigDecimal finalResult = wallet.getGeneralBalance().add(resultRate);
                 wallet.setGeneralBalance(finalResult);
             }
-        });
-
+        }
+        if(walletFragmentForSave != null) {
+            walletFragmentRepository.save(walletFragmentForSave);
+        }
         return walletRepository.save(wallet);
     }
 
@@ -92,7 +112,7 @@ public class WalletImpl implements WalletService {
                 ExchangeRate rates = exchangeRateService.getExchangeRateBySymbol(wallet.getGeneralSymbolBalance());
 
                 BigDecimal resultRate = CalculateTradeUtils.calculateTradeFromOneCoin(
-                        walletFragment.get().getSymbol(),walletFragment.get().getBalance(),rates);
+                        walletFragment.get().getSymbol(),true,walletFragment.get().getBalance(),rates);
 
                 BigDecimal finalResult = wallet.getGeneralBalance().subtract(resultRate);
                 wallet.setGeneralBalance(finalResult);
@@ -106,4 +126,32 @@ public class WalletImpl implements WalletService {
         }
         return walletRepository.save(wallet);
     }
+    public BigDecimal verifyHasInitialValueForChangeBaseSymbolWallet(Wallet wallet) {
+
+        ExchangeRate rates = exchangeRateService.getExchangeRateBySymbol(wallet.getGeneralSymbolBalance());
+
+        Optional<WalletFragment> walletFragmentEqual =  wallet.getWalletFragments().stream()
+                .filter(fragment -> fragment.getSymbol().equals(wallet.getGeneralSymbolBalance()))
+                .findFirst();
+
+        BigDecimal initialValueWallet = wallet.getGeneralBalance();
+
+        if(walletFragmentEqual.isPresent()) {
+            initialValueWallet = initialValueWallet.subtract(walletFragmentEqual.get().getBalance());
+        }
+
+        for(WalletFragment walletFragment:wallet.getWalletFragments()) {
+            if(!walletFragment.getSymbol().equals(wallet.getGeneralSymbolBalance())) {
+
+                BigDecimal resultRate = CalculateTradeUtils.calculateTradeFromOneCoin(
+                        walletFragment.getSymbol(),true,walletFragment.getBalance(),rates);
+
+                initialValueWallet = initialValueWallet.subtract(resultRate);
+            }
+        }
+
+        return initialValueWallet;
+    }
 }
+
+

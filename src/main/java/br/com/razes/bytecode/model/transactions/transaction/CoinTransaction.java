@@ -25,9 +25,9 @@ public class CoinTransaction {
 
     private String symbolToCoin;
 
-    private BigDecimal result;
+    private String result;
 
-    private BigDecimal rate;
+    private String rate;
 
     @ManyToOne
     private Transactions transactions;
@@ -38,7 +38,7 @@ public class CoinTransaction {
 
     }
     public CoinTransaction(BigDecimal amount, String symbolFromCoin, String symbolToCoin,
-                        BigDecimal result ,BigDecimal rate ,Transactions transactions) {
+                           String result ,String rate ,Transactions transactions) {
         this.amount = amount;
         this.symbolFromCoin = symbolFromCoin;
         this.symbolToCoin = symbolToCoin;
@@ -76,7 +76,7 @@ public class CoinTransaction {
         return symbolToCoin;
     }
 
-    public BigDecimal getRate() {
+    public String getRate() {
         return rate;
     }
 
@@ -87,7 +87,7 @@ public class CoinTransaction {
         return register;
     }
 
-    public BigDecimal getResult() {
+    public String getResult() {
         return result;
     }
 }

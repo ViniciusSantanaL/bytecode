@@ -31,9 +31,11 @@ public class TradeController {
         if(rates == null)
             throw new ApiRequestException("This Base Symbol not Exist: " + tradeForm.getBaseSymbol());
 
-        BigDecimal result = CalculateTradeUtils.calculateTradeFromOneCoin(tradeForm.getFromSymbol(),tradeForm.getAmount(),rates);
+        BigDecimal result = CalculateTradeUtils.calculateTradeFromOneCoin(tradeForm.getFromSymbol(),
+                false,tradeForm.getAmount(),rates);
+
         BigDecimal rate = result.divide(tradeForm.getAmount());
-        TradeDTO tradeDTO =  new TradeDTO(result,rate,rates.getUpdateRate());
+        TradeDTO tradeDTO =  new TradeDTO(result.toString(),rate.toString(),rates.getUpdateRate());
 
         return ResponseEntity.ok(tradeDTO);
     }

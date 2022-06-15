@@ -16,8 +16,15 @@ public class WalletDTO {
     private final List<WalletFragmentDTO> walletFragments = new ArrayList<>();
     public WalletDTO(Wallet newWallet) {
         this.baseSymbolBalance = newWallet.getGeneralSymbolBalance();
-        this.walletBalance = newWallet.getGeneralBalance();
-        this.walletFragments.addAll(newWallet.getWalletFragments().stream().map(WalletFragmentDTO::new).collect(Collectors.toList()));
+        this.walletBalance = newWallet.getGeneralBalance() != null ? newWallet.getGeneralBalance() : BigDecimal.ZERO;
+        if(newWallet.getWalletFragments() != null) {
+            this.walletFragments.addAll(newWallet.getWalletFragments().stream()
+                    .map(WalletFragmentDTO::new).collect(Collectors.toList()));
+        }
+    }
+    public WalletDTO(String baseSymbolBalance) {
+        this.baseSymbolBalance = baseSymbolBalance;
+        this.walletBalance = BigDecimal.ZERO;
     }
 
     public String getBaseSymbolBalance() {

@@ -44,25 +44,26 @@ public class TransactionsImpl implements TransactionsService {
         if(transactions == null) {
             Transactions newTransactions = new Transactions(idUser,coinType, wallet.getId());
             CoinTransaction coinTransaction = createCoinTransaction(tradeForm,tradeDTO,newTransactions);
-            BigDecimal addResultWallet = coinTransaction.getResult();
+            newTransactions.getCoinTransactions().add(coinTransaction);
 
-            wallet.setGeneralBalance(wallet.getGeneralBalance().add(addResultWallet));
+            BigDecimal addResultWallet = new BigDecimal(coinTransaction.getResult());
+
+
+            wallet.setGeneralBalance(wallet.getGeneralBalance().add(coinTransaction.getAmount()));
 
             Optional<WalletFragment> walletFragment =  wallet.getWalletFragments().stream()
                     .filter(fragment -> fragment.getSymbol().equals(coinTransaction.getSymbolToCoin()))
                     .findFirst();
-            newTransactions.getCoinTransactions()
-                    .add(coinTransaction);
 
             if(walletFragment.isPresent()) {
                 wallet.getWalletFragments().remove(walletFragment.get());
-                BigDecimal result = walletFragment.get().getBalance().add(coinTransaction.getAmount());
+                BigDecimal result = walletFragment.get().getBalance().add(addResultWallet);
                 walletFragment.get().setBalance(result);
                 wallet.getWalletFragments().add(walletFragment.get());
 
             }else {
                 WalletFragment newFragment = new WalletFragment(
-                        coinTransaction.getSymbolToCoin(),coinTransaction.getAmount(),wallet);
+                        coinTransaction.getSymbolToCoin(),addResultWallet,wallet);
                 wallet.getWalletFragments().add(newFragment);
             }
             walletService.saveWallet(wallet);
@@ -70,8 +71,8 @@ public class TransactionsImpl implements TransactionsService {
         }else {
             CoinTransaction coinTransaction = createCoinTransaction(tradeForm,tradeDTO,transactions);
 
-            BigDecimal addResultWallet = coinTransaction.getResult();
-            wallet.setGeneralBalance(wallet.getGeneralBalance().add(addResultWallet));
+            BigDecimal addResultWallet = new BigDecimal(coinTransaction.getResult());
+            wallet.setGeneralBalance(wallet.getGeneralBalance().add(coinTransaction.getAmount()));
 
             Optional<WalletFragment> walletFragment =  wallet.getWalletFragments().stream()
                     .filter(fragment -> fragment.getSymbol().equals(coinTransaction.getSymbolToCoin()))
@@ -82,13 +83,13 @@ public class TransactionsImpl implements TransactionsService {
 
             if(walletFragment.isPresent()) {
                 wallet.getWalletFragments().remove(walletFragment.get());
-                BigDecimal result = walletFragment.get().getBalance().add(coinTransaction.getAmount());
+                BigDecimal result = walletFragment.get().getBalance().add(addResultWallet);
                 walletFragment.get().setBalance(result);
                 wallet.getWalletFragments().add(walletFragment.get());
 
             }else {
                 WalletFragment newFragment = new WalletFragment(
-                        coinTransaction.getSymbolToCoin(),coinTransaction.getAmount(),wallet);
+                        coinTransaction.getSymbolToCoin(),addResultWallet,wallet);
                 wallet.getWalletFragments().add(newFragment);
             }
 
@@ -101,8 +102,8 @@ public class TransactionsImpl implements TransactionsService {
         BigDecimal amount = tradeForm.getAmount();
         String symbolFromCoin = tradeForm.getBaseSymbol();
         String symbolToCoin = tradeForm.getFromSymbol();
-        BigDecimal result = tradeDTO.getResult();
-        BigDecimal rate = tradeDTO.getRate();
+        String result = tradeDTO.getResult();
+        String rate = tradeDTO.getRate();
 
         return new CoinTransaction(amount,symbolFromCoin,symbolToCoin,result,rate,transactions);
     }

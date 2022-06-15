@@ -6,23 +6,23 @@ import java.time.ZonedDateTime;
 public class TradeDTO {
 
 
-    private BigDecimal result;
+    private String result;
 
-    private  BigDecimal rate;
+    private  String rate;
 
     private ZonedDateTime timeRate;
 
-    public TradeDTO(BigDecimal result, BigDecimal rate, ZonedDateTime timeRate) {
+    public TradeDTO(String result, String rate, ZonedDateTime timeRate) {
         this.result = result;
         this.rate = rate;
         this.timeRate = timeRate;
     }
 
-    public BigDecimal getResult() {
+    public String getResult() {
         return result;
     }
 
-    public BigDecimal getRate() {
+    public String getRate() {
         return rate;
     }
 

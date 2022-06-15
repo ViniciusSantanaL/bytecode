@@ -83,6 +83,19 @@ public class WalletController {
         return ResponseEntity.ok(new WalletDTO(wallet));
     }
 
+    @GetMapping("/base")
+    public ResponseEntity<String> getBaseSymbolWalletByUserId(@RequestHeader(value = "Authorization") String token) {
+
+        Long idUser = tokenService.getIdUser(token.substring(7));
+
+        String symbolBalanceWallet = walletService.getBaseSymbolWalletByIdUser(idUser);
+
+        if(symbolBalanceWallet == null)
+            throw new ApiRequestException("This wallet not Exist for this User: idUser(" + idUser + ")");
+
+        return ResponseEntity.ok(symbolBalanceWallet);
+    }
+
     @PostMapping("/add-fragment")
     public ResponseEntity<WalletDTO> addFragmentWallet(@RequestBody @Valid WalletFragmentFrom walletFragmentFrom,
         @RequestHeader(value = "Authorization") String token, UriComponentsBuilder uriBuilder) {
@@ -115,7 +128,7 @@ public class WalletController {
             ExchangeRate rates = exchangeRateService.getExchangeRateBySymbol(wallet.getGeneralSymbolBalance());
 
             BigDecimal newBalanceFragmentRated = CalculateTradeUtils.calculateTradeFromOneCoin(
-                    newFragment.getSymbol(),newFragment.getBalance(),rates);
+                    newFragment.getSymbol(),true,newFragment.getBalance(),rates);
 
             wallet.setGeneralBalance(wallet.getGeneralBalance().add(newBalanceFragmentRated));
         }

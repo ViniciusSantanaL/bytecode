@@ -8,7 +8,7 @@ public class CurrentRateDTO {
 
     private final String symbol;
 
-    private final BigDecimal rate;
+    private final String rate;
 
     public CurrentRateDTO(CurrentRate currentRate) {
         this.symbol = currentRate.getSymbol();
@@ -19,7 +19,7 @@ public class CurrentRateDTO {
         return symbol;
     }
 
-    public BigDecimal getRate() {
+    public String getRate() {
         return rate;
     }
 }

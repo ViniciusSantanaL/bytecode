@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public class CalculateTradeUtils {
 
-    public static BigDecimal calculateTradeFromOneCoin(String fromSymbol,BigDecimal amount, ExchangeRate rates) {
+    public static BigDecimal calculateTradeFromOneCoin(String fromSymbol,boolean fragment,BigDecimal amount, ExchangeRate rates) {
 
         Optional<CurrentRate> currentRate = rates.getCurrentRates().stream()
                 .filter(current -> current.getSymbol().equals(fromSymbol))
@@ -20,13 +20,11 @@ public class CalculateTradeUtils {
         if(currentRate.isEmpty())
             throw new ApiRequestException("This From Symbol not Exist: " + fromSymbol);
 
-        BigDecimal currentRateCoin = currentRate.get().getRate();
-
-        if(currentRateCoin.compareTo(BigDecimal.ONE) == 1) {
-            return amount.multiply(currentRateCoin.setScale(2,  RoundingMode.HALF_UP)) ;
-        } else {
-            return amount.divide(currentRateCoin,2, RoundingMode.HALF_UP) ;
+        BigDecimal currentRateCoin = new BigDecimal(currentRate.get().getRate());
+        if(fragment) {
+            return amount.divide(currentRateCoin,2,RoundingMode.HALF_EVEN) ;
         }
+        return amount.multiply(currentRateCoin).setScale(2, RoundingMode.HALF_EVEN) ;
 
     }
 }

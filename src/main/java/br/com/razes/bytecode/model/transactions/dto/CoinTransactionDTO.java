@@ -14,11 +14,11 @@ public class CoinTransactionDTO {
 
     private final String toSymbol;
 
-    private final BigDecimal rate;
+    private final String rate;
 
     private final ZonedDateTime register;
 
-    private final BigDecimal result;
+    private final String result;
 
     public CoinTransactionDTO(CoinTransaction coinTransaction) {
         this.id = coinTransaction.getId();
@@ -43,7 +43,7 @@ public class CoinTransactionDTO {
         return toSymbol;
     }
 
-    public BigDecimal getRate() {
+    public String getRate() {
         return rate;
     }
 
@@ -55,7 +55,7 @@ public class CoinTransactionDTO {
         return id;
     }
 
-    public BigDecimal getResult() {
+    public String getResult() {
         return result;
     }
 }

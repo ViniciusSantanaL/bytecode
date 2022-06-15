@@ -18,6 +18,8 @@ public interface WalletService {
 
     Wallet findByIdUser(Long idUser);
 
+    String getBaseSymbolWalletByIdUser(Long idUser);
+
 
     Wallet changeBaseBalanceWallet(Wallet wallet, String symbol);
 

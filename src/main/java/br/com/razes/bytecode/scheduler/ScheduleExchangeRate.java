@@ -30,6 +30,7 @@ public class ScheduleExchangeRate {
     @Autowired
     private ExchangeRateService exchangeRateService;
 
+
     @Scheduled(cron = "${date.time.update.exchange.rates}")
     public void  updateAllExchangeRatesTraditionalCoins() {
         try {
@@ -47,7 +48,7 @@ public class ScheduleExchangeRate {
         ExchangeRate exchangeRateUpdate =  exchangeRateService.getExchangeRateBySymbol(symbol);
         exchangeRateUpdate.getCurrentRates().forEach(currentRate -> {
             String rate = rates.getRates().get(currentRate.getSymbol());
-            currentRate.setRate(new BigDecimal(rate));
+            currentRate.setRate(rate);
         });
         exchangeRateUpdate.setActive(true);
         exchangeRateUpdate.setUpdateRate(ZonedDateTime.now(ZoneId.of("America/Sao_Paulo")));

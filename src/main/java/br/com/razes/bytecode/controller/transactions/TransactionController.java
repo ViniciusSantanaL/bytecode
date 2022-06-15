@@ -14,16 +14,14 @@ import br.com.razes.bytecode.service.transactions.TransactionsService;
 import br.com.razes.bytecode.service.wallet.WalletService;
 import br.com.razes.bytecode.utils.CalculateTradeUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.net.URI;
 
 @RestController
@@ -49,12 +47,21 @@ public class TransactionController {
 
         if(rates == null)
             throw new ApiRequestException("This Base Symbol not Exist: " + tradeForm.getBaseSymbol());
+
         CoinType coinType = CoinType.valueOf(tradeForm.getType());
 
-        BigDecimal result = CalculateTradeUtils.calculateTradeFromOneCoin(tradeForm.getFromSymbol(),tradeForm.getAmount(),rates);
+        BigDecimal result = BigDecimal.ZERO;
+
+        if(tradeForm.getBaseSymbol().equals(tradeForm.getFromSymbol())){
+            result = tradeForm.getAmount();
+        } else {
+            result = CalculateTradeUtils.calculateTradeFromOneCoin(
+                    tradeForm.getFromSymbol(),false,tradeForm.getAmount(),rates);
+        }
+
         Long idUser = tokenService.getIdUser(token.substring(7));
-        BigDecimal rate = result.divide(tradeForm.getAmount());
-        TradeDTO tradeDTO =  new TradeDTO(result,rate,rates.getUpdateRate());
+        BigDecimal rate = result.divide(tradeForm.getAmount(), MathContext.DECIMAL128).setScale(6, RoundingMode.HALF_EVEN);
+        TradeDTO tradeDTO =  new TradeDTO(result.toString(),rate.toString(),rates.getUpdateRate());
 
         Transactions transactions = transactionsService.getTransactionsBy(idUser,coinType);
         Wallet wallet = walletService.findByIdUser(idUser);

@@ -14,7 +14,7 @@ public class CurrentRate {
 
     private String symbol;
 
-    private BigDecimal rate = BigDecimal.ONE;
+    private String rate = "0.000000";
 
     @ManyToOne
     private ExchangeRate exchangeRate;
@@ -38,11 +38,11 @@ public class CurrentRate {
         this.symbol = symbol;
     }
 
-    public BigDecimal getRate() {
+    public String getRate() {
         return rate;
     }
 
-    public void setRate(BigDecimal rate) {
+    public void setRate(String rate) {
         this.rate = rate;
 
     }
